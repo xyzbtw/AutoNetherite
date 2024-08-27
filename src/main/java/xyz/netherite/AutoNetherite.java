@@ -85,19 +85,16 @@ public class AutoNetherite extends ToggleableModule {
 
         if (!menu.getSlot(0).hasItem()){
             InventoryUtils.clickSlot(templateSlot, true);
-            System.out.println("CLICKING ON TEMPLATE SLOT " + templateSlot);
             return;
         }
 
         if (!menu.getSlot(1).hasItem()){
             InventoryUtils.clickSlot(diamondItem, true);
-            System.out.println("CLICKING ON DIAMOND SLOT " + diamondItem);
             return;
         }
 
         if (!menu.getSlot(2).hasItem()){
             InventoryUtils.clickSlot(netheriteSlot, true);
-            System.out.println("CLICKING ON NETHERITE SLOT " + netheriteSlot);
             return;
         }
     }
