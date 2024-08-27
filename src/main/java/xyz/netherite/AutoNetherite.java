@@ -5,10 +5,7 @@ import net.minecraft.client.gui.screens.inventory.SmithingScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.SmithingMenu;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SmithingTemplateItem;
+import net.minecraft.world.item.*;
 import org.rusherhack.client.api.events.client.EventUpdate;
 import org.rusherhack.client.api.feature.module.ModuleCategory;
 import org.rusherhack.client.api.feature.module.ToggleableModule;
@@ -128,15 +125,13 @@ public class AutoNetherite extends ToggleableModule {
     private boolean isDiamondThing(ItemStack stack){
         boolean diamond = false;
 
+        if ((stack.getItem() instanceof ArmorItem item) && item.getMaterial().equals(ArmorMaterials.DIAMOND)) diamond = true;
+
         if (stack.getItem().equals(Items.DIAMOND_AXE)) diamond = true;
         if (stack.getItem().equals(Items.DIAMOND_HOE)) diamond = true;
         if (stack.getItem().equals(Items.DIAMOND_PICKAXE)) diamond = true;
         if (stack.getItem().equals(Items.DIAMOND_SHOVEL)) diamond = true;
         if (stack.getItem().equals(Items.DIAMOND_SWORD)) diamond = true;
-        if (stack.getItem().equals(Items.DIAMOND_HELMET)) diamond = true;
-        if (stack.getItem().equals(Items.DIAMOND_CHESTPLATE)) diamond = true;
-        if (stack.getItem().equals(Items.DIAMOND_LEGGINGS)) diamond = true;
-        if (stack.getItem().equals(Items.DIAMOND_BOOTS)) diamond = true;
 
         return diamond;
     }
