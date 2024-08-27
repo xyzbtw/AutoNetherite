@@ -1,0 +1,2 @@
+# AutoNetherite
+ rusherhack plugin

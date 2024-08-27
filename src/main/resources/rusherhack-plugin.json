@@ -1,0 +1,13 @@
+{
+  "Plugin-Class": "xyz.netherite.PluginInit",
+  "Name": "AutoNetherite",
+  "Version": "${plugin_version}",
+  "Description": "Automatically upgrades diamond tools to netherite",
+  "Authors": [
+    "xyzbtw"
+  ],
+  "Minecraft-Versions": [
+    "1.20.4",
+    "1.21"
+  ]
+}
