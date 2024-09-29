@@ -1,8 +1,6 @@
 package xyz.netherite;
 
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.SmithingScreen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.*;
@@ -12,9 +10,9 @@ import org.rusherhack.client.api.feature.module.ToggleableModule;
 import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.client.api.utils.InventoryUtils;
 import org.rusherhack.core.event.subscribe.Subscribe;
+import org.rusherhack.core.setting.BooleanSetting;
 import org.rusherhack.core.setting.NumberSetting;
 import org.rusherhack.core.setting.Setting;
-import org.rusherhack.core.utils.Timer;
 
 import java.awt.*;
 import java.util.function.Predicate;
@@ -29,12 +27,12 @@ public class AutoNetherite extends ToggleableModule {
     public AutoNetherite() {
         super("AutoNetherite", ModuleCategory.MISC);
         this.registerSettings(
-                this.delay
+                this.delay,
+                this.toggleOnFinished
         );
     }
     private Setting<Integer> delay = new NumberSetting<>("Delay[ticks]", 1, 0, 5);
-
-    private Timer timer = new Timer();
+    private Setting<Boolean> toggleOnFinished = new BooleanSetting("ToggleOnFinished", true);
 
     int ticksPassed = 0;
 
@@ -45,7 +43,6 @@ public class AutoNetherite extends ToggleableModule {
         ticksPassed++;
         if (ticksPassed < delay.getValue()) return;
         ticksPassed = 0;
-
 
         if (!(mc.screen instanceof SmithingScreen screen)) return;
 
@@ -61,20 +58,17 @@ public class AutoNetherite extends ToggleableModule {
         int diamondItem = findItem(this::isDiamondThing, menu);
 
         if (templateSlot == -1 && !menu.getSlot(0).hasItem()){
-            ChatUtils.print("No templates in inventory, disabling", Style.EMPTY.withColor(Color.RED.getRGB()));
-            this.toggle();
+            suspend("No templates in inventory, disabling");
             return;
         }
 
         if (diamondItem == -1 && !menu.getSlot(1).hasItem()){
-            ChatUtils.print("No diamond item to upgrade in inventory, disabling", Style.EMPTY.withColor(Color.RED.getRGB()));
-            this.toggle();
+            suspend("No diamond item to upgrade in inventory, disabling");
             return;
         }
 
         if (netheriteSlot == -1 && !menu.getSlot(2).hasItem()){
-            ChatUtils.print("No netherite in inventory, disabling", Style.EMPTY.withColor(Color.RED.getRGB()));
-            this.toggle();
+            suspend("No netherite in inventory, disabling");
             return;
         }
 
@@ -99,6 +93,15 @@ public class AutoNetherite extends ToggleableModule {
         }
     }
 
+    private void suspend(String reason) {
+        if (toggleOnFinished.getValue()) {
+            ChatUtils.print(reason, Style.EMPTY.withColor(Color.RED.getRGB()));
+            this.toggle();
+        } else {
+            // noop
+        }
+    }
+
     public static int findItem(Item item, SmithingMenu menu) {
         Predicate<ItemStack> predicate = stack -> stack.getItem().equals(item);
         return findItem(predicate, menu);
@@ -117,8 +120,6 @@ public class AutoNetherite extends ToggleableModule {
         return -1;
     }
 
-
-
     private boolean isDiamondThing(ItemStack stack){
         boolean diamond = false;
 
@@ -132,8 +133,4 @@ public class AutoNetherite extends ToggleableModule {
 
         return diamond;
     }
-
-
-
-
 }
